@@ -15,9 +15,10 @@ const db = new pg.Client({
   port: 5432,
 })
 db.connect()
-
+var ch="hell";
 db.query('INSERT INTO sensor (value) VALUES ($1::text as message)', ['100'], (err, res) => {
   console.log(err ? err.stack : res.rows[0].message) // Hello World!
+  ch = err ? err.stack : res.rows[0].message;
   db.end()
 })
 
@@ -38,7 +39,7 @@ msg = message.toString()
 const app = express();
 app.get('/' , (request,response) => {
    
-  response.send("hell");
+  response.send(ch);
   
 });
 app.get('/hope' , (request,response) => {
