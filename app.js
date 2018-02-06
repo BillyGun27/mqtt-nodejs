@@ -47,7 +47,7 @@ msg = message.toString()
 const app = express();
 app.get('/' , (request,response) => {
    
-  response.send(process.env.HEROKU_POSTGRESQL_DBNAME_URL);
+  response.send(process.env.DATABASE_URL);
   
 });
 app.get('/hope' , (request,response) => {
