@@ -3,7 +3,7 @@ var mqtt = require('mqtt')
 var client  = mqtt.connect('mqtt://iot.eclipse.org')
 
 const pg = require('pg');
-const connectionString = process.env.DATABASE_URL || 'postgres://ec2-23-21-162-90.compute-1.amazonaws.com:5432/dake2nd0sealua';
+const connectionString = process.env.DATABASE_URL || 'friikdyehsyedi://ec2-23-21-162-90.compute-1.amazonaws.com:5432/dake2nd0sealua';
 
 const db = new pg.Client(connectionString);
 db.connect();
