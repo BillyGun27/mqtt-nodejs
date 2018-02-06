@@ -1,5 +1,5 @@
 const express = require('express');
-var mqtt = require('mqtt')
+/*var mqtt = require('mqtt')
 var client  = mqtt.connect('mqtt://iot.eclipse.org')
  
 client.on('connect', function () {
@@ -14,8 +14,13 @@ client.on('message', function (topic, message) {
 msg = message.toString()
   // client.end()
 })
-
+*/
 const app = express();
+app.get('/' , (request,response) => {
+   
+  response.send("hell");
+  
+});
 app.get('/hope' , (request,response) => {
    
     response.send(msg);
