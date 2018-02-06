@@ -7,7 +7,7 @@ const pg = require('pg');
 
 //const db = new pg.Client(connectionString);
 //db.connect();
-const db = new Client({
+const db = new pg.Client({
   user: 'friikdyehsyedi',
   host: 'ec2-23-21-162-90.compute-1.amazonaws.com',
   database: 'dake2nd0sealua',
