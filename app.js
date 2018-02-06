@@ -22,15 +22,14 @@ db.query('INSERT INTO sensor (value) VALUES ($1::text as message)', ['100'], (er
   db.end()
 })
 */
-
+/*
 pg.connect(process.env.HEROKU_POSTGRESQL_DBNAME_URL, function(err, client, done) {
   client.query('INSERT INTO sensor (value) VALUES ($1::text as message)',['100'], function(err, result) {
      done();
      if(err) return console.error(err);
      console.log(result.rows);
   });
-});
-
+});*/
  
 client.on('connect', function () {
   client.subscribe('presence')
