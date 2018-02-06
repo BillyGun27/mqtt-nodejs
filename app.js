@@ -3,14 +3,21 @@ var mqtt = require('mqtt')
 var client  = mqtt.connect('mqtt://iot.eclipse.org')
 
 const pg = require('pg');
-const connectionString = process.env.DATABASE_URL || 'friikdyehsyedi://ec2-23-21-162-90.compute-1.amazonaws.com:5432/dake2nd0sealua';
+//const connectionString = process.env.DATABASE_URL || 'friikdyehsyedi://ec2-23-21-162-90.compute-1.amazonaws.com:5432/dake2nd0sealua';
 
-const db = new pg.Client(connectionString);
-db.connect();
-
+//const db = new pg.Client(connectionString);
+//db.connect();
+const db = new Client({
+  user: 'friikdyehsyedi',
+  host: 'ec2-23-21-162-90.compute-1.amazonaws.com',
+  database: 'dake2nd0sealua',
+  password: '4c3f833eb344a184e37ea0be9cb062f45d92b5ae44d47daf66f3605bd90989e0',
+  port: 5432,
+})
+db.connect()
 
 db.query('INSERT INTO sensor (value) VALUES ($1::text as message)', ['100'], (err, res) => {
- // console.log(err ? err.stack : res.rows[0].message) // Hello World!
+  console.log(err ? err.stack : res.rows[0].message) // Hello World!
   db.end()
 })
 
