@@ -27,7 +27,11 @@ app.get('/hope' , (request,response) => {
     
 });
 
+// set the port of our application
+// process.env.PORT lets the port be set by Heroku
+var port = process.env.PORT || 3000;
+
 //app.listen(3000, () => console.log('Example app listening on port 3000!'))
-app.listen(process.env.PORT || 3000, function(){
-  console.log('listening on', http.address().port);
+app.listen(port, function() {
+  console.log('Our app is running on http://localhost:' + port);
 });
