@@ -1,3 +1,5 @@
+import { request } from 'http';
+
 const express = require('express');
 var mqtt = require('mqtt');
 var bodyParser = require('body-parser');
@@ -19,7 +21,7 @@ client.on('message', function (topic, message) {
  // msg = message.toString()
  var data = JSON.parse(message.toString());
   console.log(data.value);
- // msg = message.toString()
+  msg = message.toString()
 
 query = {
     // give the query a unique name
@@ -60,12 +62,28 @@ app.get('/' , (request,response) => {
    
   response.send(process.env.DATABASE_URL);
   
-});
-app.get('/hope' , (request,response) => {
+});*/
+app.get('/mqtt' , (request,response) => {
    
     response.send(msg);
     
-});*/
+});
+app.get('/data',(request,response )=>{
+   // callback
+   var result;
+pool.query(query, (err, res) => {
+  if (err) {
+    console.log(err.stack)
+    result = err.stack
+  } else {
+    console.log(res.rowCount)
+    result = res.rowCount
+  }
+  response.send(result);
+})
+
+ 
+} )
 
 // set the port of our application
 // process.env.PORT lets the port be set by Heroku
