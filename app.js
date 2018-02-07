@@ -55,12 +55,13 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use('/auth', auth);
 app.use('/viewdata',viewdata);
 
-
+/*
 app.get('/' , (request,response) => {
    
   //response.send(process.env.DATABASE_URL);
   response.send("hello");
 });
+*/
 app.get('/mqtt', function(request, response, next) {
   response.send(msg);
 });
