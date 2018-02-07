@@ -1,50 +1,61 @@
 const express = require('express');
-var mqtt = require('mqtt')
-var client  = mqtt.connect('mqtt://iot.eclipse.org')
+var mqtt = require('mqtt');
+var bodyParser = require('body-parser');
 
-const pg = require('pg');
-//const connectionString = process.env.DATABASE_URL || 'friikdyehsyedi://ec2-23-21-162-90.compute-1.amazonaws.com:5432/dake2nd0sealua';
+var client  = mqtt.connect('mqtt://127.0.0.1');//mqtt://iot.eclipse.org
 
-//const db = new pg.Client(connectionString);
-//db.connect();
-/*const db = new pg.Client({
-  user: 'friikdyehsyedi',
-  host: 'ec2-23-21-162-90.compute-1.amazonaws.com',
-  database: 'dake2nd0sealua',
-  password: '4c3f833eb344a184e37ea0be9cb062f45d92b5ae44d47daf66f3605bd90989e0',
-  port: 5432,
-})
-db.connect()
-var ch="hell";
-db.query('INSERT INTO sensor (value) VALUES ($1::text as message)', ['100'], (err, res) => {
-  console.log(err ? err.stack : res.rows[0].message) // Hello World!
-  ch = err ? err.stack : res.rows[0].message;
-  db.end()
-})
-*/
-/*
-pg.connect(process.env.HEROKU_POSTGRESQL_DBNAME_URL, function(err, client, done) {
-  client.query('INSERT INTO sensor (value) VALUES ($1::text as message)',['100'], function(err, result) {
-     done();
-     if(err) return console.error(err);
-     console.log(result.rows);
-  });
-});*/
+var pool = require("./connectpg");
+
  
 client.on('connect', function () {
   client.subscribe('presence')
-  client.publish('presence', 'Hello mqtt')
+  client.publish('presence', '{ "value" : "100"}')
 })
  
 var msg
 client.on('message', function (topic, message) {
   // message is Buffer
-  console.log(message.toString())
-msg = message.toString()
+ // console.log(message.toString())
+ // msg = message.toString()
+ var data = JSON.parse(message.toString());
+  console.log(data.value);
+ // msg = message.toString()
+
+query = {
+    // give the query a unique name
+    name: 'subscribeMQTT',
+    text: 'INSERT INTO sensor (do_value ,receive_date) VALUES ($1 ,CURRENT_TIMESTAMP) ',
+    values: [data.value]
+  }
+
+  // callback
+pool.query(query, (err, res) => {
+  if (err) {
+    console.log(err.stack)
+  } else {
+    console.log(res.rowCount)
+  }
+})
+
   // client.end()
 })
 
-const app = express();
+
+var index = require('./routes/index');
+var auth = require('./routes/auth');
+var viewdata = require('./routes/viewdata');
+
+var app = express();
+
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+app.use('/', index);
+app.use('/auth', auth);
+app.use('/viewdata',viewdata);
+
+/*
 app.get('/' , (request,response) => {
    
   response.send(process.env.DATABASE_URL);
@@ -54,7 +65,7 @@ app.get('/hope' , (request,response) => {
    
     response.send(msg);
     
-});
+});*/
 
 // set the port of our application
 // process.env.PORT lets the port be set by Heroku
@@ -65,15 +76,4 @@ app.listen(port, function() {
   console.log('Our app is running on http://localhost:' + port);
 });
 
-
-/*
-const { Client } = require('pg')
-const client = new Client()
-
-client.connect()
-
-client.query('SELECT $1::text as message', ['Hello world!'], (err, res) => {
-  console.log(err ? err.stack : res.rows[0].message) // Hello World!
-  client.end()
-})
-*/ 
+module.exports = app;
