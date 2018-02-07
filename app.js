@@ -76,7 +76,7 @@ pool.query(query, (err, res) => {
     console.log(res.rowCount)
     result = res.rowCount
   }
-  response.send(result);
+  response.send(result.toString() );
 })
 
  
