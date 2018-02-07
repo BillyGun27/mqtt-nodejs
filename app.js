@@ -1,10 +1,12 @@
 const express = require('express');
-var mqtt = require('mqtt');
-var bodyParser = require('body-parser');
+var path = require('path');
+const formidable = require('express-formidable');
+const mqtt = require('mqtt');
+const bodyParser = require('body-parser');
 
-var client  = mqtt.connect('mqtt://iot.eclipse.org');//mqtt://127.0.0.1
+const client  = mqtt.connect('mqtt://iot.eclipse.org');//mqtt://127.0.0.1
 
-var pool = require("./connectpg");
+const pool = require("./connectpg");
 
  
 client.on('connect', function () {
@@ -20,7 +22,7 @@ client.on('message', function (topic, message) {
  var data = JSON.parse(message.toString());
   console.log(data.value);
   msg = message.toString()
-
+/*
 query = {
     // give the query a unique name
     name: 'subscribeMQTT',
@@ -36,24 +38,57 @@ pool.query(query, (err, res) => {
     console.log(res.rowCount)
   }
 })
-
+*/
   // client.end()
 })
 
+var parseXlsx = require('excel');
+var xsru;
+parseXlsx('xls/sample_data.xls', '2',function(err, data) {
+  if(err) throw err;
+    // data is an array of arrays
+    //console.log(convertToJSON(data));
+    xsru = convertToJSON(data);
+});
+
+function convertToJSON(array) {
+  var first = array[0].join()
+  var headers = first.split(',');
+  
+  var jsonData = [];
+  for ( var i = 1, length = array.length; i < length; i++ )
+  {
+   
+    var myRow = array[i].join();
+    var row = myRow.split(',');
+    
+    var data = {};
+    for ( var x = 0; x < row.length; x++ )
+    {
+      data[headers[x]] = row[x];
+    }
+    jsonData.push(data);
+ 
+  }
+  return jsonData;
+};
 
 var index = require('./routes/index');
 var auth = require('./routes/auth');
-var viewdata = require('./routes/viewdata');
+var data = require('./routes/data');
 
 var app = express();
 
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(formidable());
+app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/', index);
+
+app.use('/', index);
 app.use('/auth', auth);
-app.use('/viewdata',viewdata);
+app.use('/data',data);
 
 /*
 app.get('/' , (request,response) => {
@@ -63,22 +98,22 @@ app.get('/' , (request,response) => {
 });
 */
 app.get('/mqtt', function(request, response, next) {
-  response.send(msg);
+  response.send(convertToJSON(data));//msg
 });
 
-app.get('/data', function(request, response, next) {
+app.get('/testpg', function(request, response, next) {
    // callback
    var result;
-pool.query(query, (err, res) => {
-  if (err) {
-    console.log(err.stack)
-    result = err.stack
-  } else {
-    console.log(res.rowCount)
-    result = res.rowCount
-  }
-  response.send(result.toString() );
-})
+      pool.query(query, (err, res) => {
+        if (err) {
+          console.log(err.stack)
+          result = err.stack
+        } else {
+          console.log(res.rowCount)
+          result = res.rowCount
+        }
+            response.send(result.toString() );
+      })
 
  
 } )
