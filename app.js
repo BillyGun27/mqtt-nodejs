@@ -2,7 +2,7 @@ const express = require('express');
 var mqtt = require('mqtt');
 var bodyParser = require('body-parser');
 
-var client  = mqtt.connect('mqtt://127.0.0.1');//mqtt://iot.eclipse.org
+var client  = mqtt.connect('mqtt://iot.eclipse.org');//mqtt://127.0.0.1
 
 var pool = require("./connectpg");
 
