@@ -47,7 +47,7 @@ var xsru;
 parseXlsx('xls/sample_data.xls', '2',function(err, data) {
   if(err) throw err;
     // data is an array of arrays
-    //console.log(convertToJSON(data));
+    console.log(convertToJSON(data));
     xsru = convertToJSON(data);
 });
 
