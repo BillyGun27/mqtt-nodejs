@@ -51,16 +51,16 @@ var app = express();
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-app.use('/', index);
+//app.use('/', index);
 app.use('/auth', auth);
 app.use('/viewdata',viewdata);
 
-/*
+
 app.get('/' , (request,response) => {
    
-  response.send(process.env.DATABASE_URL);
-  
-});*/
+  //response.send(process.env.DATABASE_URL);
+  response.send("hello");
+});
 app.get('/mqtt', function(request, response, next) {
   response.send(msg);
 });
