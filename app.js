@@ -1,5 +1,3 @@
-import { request } from 'http';
-
 const express = require('express');
 var mqtt = require('mqtt');
 var bodyParser = require('body-parser');
@@ -10,8 +8,8 @@ var pool = require("./connectpg");
 
  
 client.on('connect', function () {
-  client.subscribe('presence')
-  client.publish('presence', '{ "value" : "100"}')
+  client.subscribe('sensory')
+  client.publish('sensory', '{ "value" : "100"}')
 })
  
 var msg
