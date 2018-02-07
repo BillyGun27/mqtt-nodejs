@@ -61,12 +61,11 @@ app.get('/' , (request,response) => {
   response.send(process.env.DATABASE_URL);
   
 });*/
-app.get('/mqtt' , (request,response) => {
-   
-    response.send(msg);
-    
+app.get('/mqtt', function(request, response, next) {
+  response.send(msg);
 });
-app.get('/data',(request,response )=>{
+
+app.get('/data', function(request, response, next) {
    // callback
    var result;
 pool.query(query, (err, res) => {
