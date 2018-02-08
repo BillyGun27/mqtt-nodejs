@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-var moment = require('moment');
+var moment = require('moment-timezone');
 //moment().format();
 
 /* GET home page. */
 router.get('/', function(request, response, next) {
   
-console.log(moment.locale());         // en
-console.log(moment().format('LT'));   // 11:34 AM
+//console.log(moment.locale());         // en
+//console.log(moment().format('LT'));   // 11:34 AM
   response.send(moment().tz("Asia/Jakarta").format() );
 });
 
