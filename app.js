@@ -41,7 +41,7 @@ pool.query(query, (err, res) => {
 */
   // client.end()
 })
-
+var data;
 node_xj = require("xlsx-to-json-lc");
 node_xj({
   input: "xls/sample_data.xls",  // input xls 
@@ -49,8 +49,10 @@ node_xj({
   lowerCaseHeaders:true
 }, function(err, result) {
   if(err) {
+    data = err;
     console.error(err);
   } else {
+    data = result;
     console.log(result);
   }
 });
