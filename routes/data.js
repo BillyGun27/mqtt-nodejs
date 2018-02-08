@@ -51,11 +51,11 @@ mv(oldpath, newpath, function(err) {
 response.send(newpath);
 });
 
-
+var node_xj = require("xlsx-to-json-lc");
 router.get('/xls', function(request, response, next) {
   // callback
   var data;
-  node_xj = require("xlsx-to-json-lc");
+  
   node_xj({
     input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
     output: null, // output json 
@@ -68,9 +68,11 @@ router.get('/xls', function(request, response, next) {
       data = result;
       console.log(result);
     }
+
+    response.send(data);  
   });
 
- response.send(data);   
+ 
 
 
 
