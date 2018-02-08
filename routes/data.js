@@ -2,7 +2,7 @@ var express = require('express');
 const path = require('path');
 var router = express.Router();
 var pool = require("../connectpg");
-const uploadDir = path.join(__dirname, '/..', '/..', '/..', '/uploads/');
+
 var fs = require('fs');
 
 var query = {
@@ -39,6 +39,7 @@ router.post('/upload', function(request, response, next) {
   // callback
 console.log(JSON.stringify(request.files) );
 var file = request.files.thumbnail;
+//var ext = str.split(".");
 oldpath = file.path;
 newpath = path.join( __dirname  ,'../xls/'+ "sample_data.xls");
 mv(oldpath, newpath, function(err) {

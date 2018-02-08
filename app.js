@@ -42,15 +42,28 @@ pool.query(query, (err, res) => {
   // client.end()
 })
 
+node_xj = require("xlsx-to-json-lc");
+node_xj({
+  input: "xls/sample_data.xls",  // input xls 
+  output: null, // output json 
+  lowerCaseHeaders:true
+}, function(err, result) {
+  if(err) {
+    console.error(err);
+  } else {
+    console.log(result);
+  }
+});
+/*
 var parseXlsx = require('excel');
 var xsru;
 parseXlsx('xls/sample_data.xls', '2',function(err, data) {
   if(err) throw err;
     // data is an array of arrays
-    console.log(convertToJSON(data));
-    xsru = convertToJSON(data);
-});
-
+    console.log(JSON.stringify(data));
+    xsru = JSON.stringify(data);
+});*/
+/*
 function convertToJSON(array) {
   var first = array[0].join()
   var headers = first.split(',');
@@ -71,7 +84,7 @@ function convertToJSON(array) {
  
   }
   return jsonData;
-};
+};*/
 
 var index = require('./routes/index');
 var auth = require('./routes/auth');
