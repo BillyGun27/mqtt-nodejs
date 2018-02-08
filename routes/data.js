@@ -1,5 +1,6 @@
 var express = require('express');
 const path = require('path');
+var mv = require('mv');
 var router = express.Router();
 var pool = require("../connectpg");
 
@@ -32,7 +33,7 @@ router.get('/', function(request, response, next) {
  
   
 });
-var mv = require('mv');
+
 
 
 router.post('/upload', function(request, response, next) {
@@ -48,6 +49,31 @@ mv(oldpath, newpath, function(err) {
   // the source file.
 });
 response.send(newpath);
+});
+
+
+router.get('/xls', function(request, response, next) {
+  // callback
+  var data;
+  node_xj = require("xlsx-to-json-lc");
+  node_xj({
+    input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
+    output: null, // output json 
+    lowerCaseHeaders:true
+  }, function(err, result) {
+    if(err) {
+      data = err;
+      console.error(err);
+    } else {
+      data = result;
+      console.log(result);
+    }
+  });
+
+ response.send(data);   
+
+
+
 });
 
 

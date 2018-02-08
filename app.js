@@ -113,7 +113,7 @@ app.get('/' , (request,response) => {
 });
 */
 app.get('/mqtt', function(request, response, next) {
-  response.send(data);//msg
+  response.send(msg);
 });
 
 app.get('/testpg', function(request, response, next) {
