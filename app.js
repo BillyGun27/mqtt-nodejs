@@ -3,6 +3,7 @@ var path = require('path');
 const formidable = require('express-formidable');
 const mqtt = require('mqtt');
 const bodyParser = require('body-parser');
+var moment = require('moment-timezone');
 
 const client  = mqtt.connect('mqtt://iot.eclipse.org');//mqtt://127.0.0.1
 
@@ -10,24 +11,52 @@ const pool = require("./connectpg");
 
  
 client.on('connect', function () {
-  client.subscribe('sensory')
-  client.publish('sensory', '{ "value" : "100"}')
+  client.subscribe('machine')
+  client.subscribe('sensor')
+  client.publish('sensor', '100')
+client.publish('machine','0')
 })
  
+
+
 var msg
 client.on('message', function (topic, message) {
   // message is Buffer
  // console.log(message.toString())
  // msg = message.toString()
- var data = JSON.parse(message.toString());
-  console.log(data.value);
-  msg = message.toString()
-/*
-query = {
+ var ind = moment().tz("Asia/Jakarta")
+
+ var table ,content;
+ switch (topic) {
+   case "machine":
+    table = "mesin"
+    content = "status_mesin";
+    console.log(topic,"+",message.toString());
+    Sendpgsql(table,content,message,ind);
+     break;
+   case "sensor":
+    table = "sensor"
+    content = "do_value";
+   // msg = message.toString();
+  console.log(topic,"+",message.toString());
+    Sendpgsql(table,content,message,ind);
+     break;
+   
+ }
+  
+
+
+
+  // client.end()
+})
+
+function Sendpgsql(table,content,message,ind){
+  console.log(table);
+  var query = {
     // give the query a unique name
-    name: 'subscribeMQTT',
-    text: 'INSERT INTO sensor (do_value ,receive_date) VALUES ($1 ,CURRENT_TIMESTAMP) ',
-    values: [data.value]
+    name: table,
+    text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time) VALUES ($1,$2,$3) ',
+    values: [  message.toString()  ,ind.format('l'),ind.format('HH:mm:ss')]
   }
 
   // callback
@@ -38,9 +67,9 @@ pool.query(query, (err, res) => {
     console.log(res.rowCount)
   }
 })
-*/
-  // client.end()
-})
+
+}
+
 var data;
 node_xj = require("xlsx-to-json-lc");
 node_xj({
@@ -50,10 +79,10 @@ node_xj({
 }, function(err, result) {
   if(err) {
     data = err;
-    console.error(err);
+   // console.error(err);
   } else {
     data = result;
-    console.log(result);
+  //  console.log(result);
   }
 });
 /*

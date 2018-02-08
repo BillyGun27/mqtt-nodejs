@@ -5,35 +5,59 @@ var router = express.Router();
 var pool = require("../connectpg");
 
 var fs = require('fs');
-
-var query = {
-    // give the query a unique name
-   // name: 'get_sensor',
-    text: 'SELECT * FROM sensor'//,
-   // values: [1]
-  }
   
 
 /* GET home page. */
 router.get('/', function(request, response, next) {
-     // callback
-     var result;
+     
+    
+    response.send("hello");   
 
-  pool.query(query, (err, res) => {
-    if (err) {
-        result = err.stack;
-      console.log(err.stack)
-    } else {
-        result=res;//.rows[0];
-      console.log(res)
-    }
-    response.send(result);   
-  })
-
- 
-  
 });
 
+/* GET home page. */
+router.get('/sensor', function(request, response, next) {
+  // callback
+  var result;
+  var query = {
+    text: 'SELECT * FROM sensor'
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+
+
+});
+
+/* GET home page. */
+router.get('/mesin', function(request, response, next) {
+  // callback
+  var result;
+  var query = {
+    text: 'SELECT * FROM mesin'//,
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+
+
+});
 
 
 router.post('/upload', function(request, response, next) {
