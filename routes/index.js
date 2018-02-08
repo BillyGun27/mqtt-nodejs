@@ -9,7 +9,7 @@ router.get('/', function(request, response, next) {
   
 console.log(moment.locale());         // en
 console.log(moment().format('LT'));   // 11:34 AM
-  response.send(moment().format('LT'));
+  response.send(moment().tz("Asia/Jakarta").format() );
 });
 
 router.get('/upload', function(request, response, next) {
