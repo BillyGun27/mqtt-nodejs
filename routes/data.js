@@ -11,7 +11,7 @@ var fs = require('fs');
 router.get('/', function(request, response, next) {
      
     
-    response.send("hello");   
+    response.send(request.headers);   
 
 });
 
@@ -20,36 +20,44 @@ router.get('/sensor', function(request, response, next) {
   // callback
   var result;
   var query = {
-    text: 'SELECT * FROM sensor'
+    text: 'SELECT * FROM sensor WHERE receive_date BETWEEN $1 AND $2 ',
+    values: [ request.query.min ,request.query.max ]
   }
 pool.query(query, (err, res) => {
  if (err) {
      result = err.stack;
    console.log(err.stack)
  } else {
-     result=res;//.rows[0];
+     result=res.rows;//.rows[0];
    console.log(res)
  }
- response.send(result);   
+ response.send(result); 
+ //console.log(request);  
 })
 
 
 
 });
 
+/**
+ * SELECT x1.id, x1.date, DATEDIFF(mi, x2.date, x1.date)
+FROM x AS x1 LEFT JOIN x AS x2
+ON x1.id = x2.id +1 
+ */
+
 /* GET home page. */
 router.get('/mesin', function(request, response, next) {
   // callback
   var result;
   var query = {
-    text: 'SELECT * FROM mesin'//,
+    text: "SELECT * ,(x2.receive_time - x1.receive_time) AS diff FROM public.mesin AS x1 ,public.mesin AS x2 WHERE x1.id +1 = x2.id "//,
   }
 pool.query(query, (err, res) => {
  if (err) {
      result = err.stack;
    console.log(err.stack)
  } else {
-     result=res;//.rows[0];
+     result=res.rows;//.rows[0];
    console.log(res)
  }
  response.send(result);   

@@ -1,4 +1,5 @@
 var express = require('express');
+const path = require('path');
 var router = express.Router();
 
 var moment = require('moment-timezone');
@@ -13,7 +14,7 @@ router.get('/', function(request, response, next) {
 });
 
 router.get('/upload', function(request, response, next) {
-  response.sendFile('./public/upload.html');
+  response.sendFile(path.join( __dirname  ,'../public/upload.html'));
 });
 
 
