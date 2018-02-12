@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('json-web-token');
-var secret = 'TOPSECRETTTTT';
+var passwordHash = require('password-hash');
+var secret = 'NotSecret';
 var pool = require("../connectpg");
 
 
@@ -11,11 +12,12 @@ router.get('/', function(request, response, next) {
 });
 
 router.post('/register', function(request, response, next) {
+  var hashedPassword = passwordHash.generate(request.body.password);
   var query = {
     // give the query a unique name
    // name: 'get_sensor',
     text: 'INSERT INTO user_account (email,password) VALUES ($1, $2) ',
-    values: [request.body.email,request.body.password]
+    values: [request.body.email, hashedPassword]
   }
 
   pool.query(query, (err, res) => {
@@ -29,10 +31,10 @@ router.post('/register', function(request, response, next) {
               result = false;
           }
           
-        console.log(res)
+        //console.log(res)
       }
       response.send(result);   
-    })
+    });
 
 });
 
@@ -40,21 +42,29 @@ router.post('/login', function(request, response, next) {
     var query = {
         // give the query a unique name
        // name: 'get_sensor',
-        text: 'SELECT * FROM user_account WHERE email=$1 AND password=$2 ',
-        values: [request.body.email,request.body.password]
+        text: 'SELECT * FROM user_account WHERE email=$1',
+        values: [request.body.email]
       }
 
+      result = "none";
     pool.query(query, (err, res) => {
         if (err) {
             result = err.stack;
           console.log(err.stack)
         } else {
             if(res.rowCount){
-                //.rows[0];
+            //  result = res;//.rows.password;
+            console.log(res.rows);
+            console.log(res.rows[0].email);
+            console.log(res.rows[0].password);
+             if(passwordHash.verify(request.body.password, res.rows[0].password)){
+               
+                 //.rows[0];
 
-                var payload = {
-                  "id" : res.rows.id,
-                  "email": res.rows.password 
+                 var payload = {
+                   "code": "bubble",
+                  "id" : res.rows[0].id,
+                  "email": res.rows[0].email
                 };
                  
                 
@@ -63,6 +73,7 @@ router.post('/login', function(request, response, next) {
               jwt.encode(secret, payload, function (err, token) {
                 if (err) {
                   console.error(err.name, err.message);
+                  result=err.name, err.message;
                 } else {
                   console.log(token);
                
@@ -71,15 +82,22 @@ router.post('/login', function(request, response, next) {
                 }
               });
 
+              }else{
+                console.log("password false");
+                result="password false"; 
+              }
+               
 
             }else{
-                result = false;
+              console.log("email false");
+              result="email false"; 
             }
-            
-          console.log(res)
+          //console.log(res)
         }
-        response.send(result);   
-      })
+
+        response.send(result);  
+        response.end();
+      });
 
   });
 

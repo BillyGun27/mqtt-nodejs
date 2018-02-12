@@ -16,7 +16,7 @@ router.get('/', function(request, response, next) {
 });
 
 /* GET home page. */
-router.get('/sensor', function(request, response, next) {
+router.post('/sensor', function(request, response, next) {
   // callback
   var result;
   var query = {
