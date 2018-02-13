@@ -113,8 +113,8 @@ router.post('/xls', function(request, response, next) {
 }
      */
 //"date":"12/21/17"dat =
-datmin = "12/21/17";//request.body.min; 
-datmax = "12/21/17";//request.body.max;
+datmin = request.body.min; 
+datmax = request.body.max;
     var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
       data: data
     }).value
