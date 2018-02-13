@@ -14,7 +14,7 @@ client.on('connect', function () {
   client.subscribe('machine')
   client.subscribe('sensor')
  // client.publish('sensor', '100')
-//client.publish('machine','0')
+ // client.publish('machine','0')
 })
  
 
@@ -56,7 +56,7 @@ function Sendpgsql(table,content,message,ind){
     // give the query a unique name
     name: table,
     text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time) VALUES ($1,$2,$3) ',
-    values: [  message.toString()  ,ind.format('l'),ind.format('HH:mm:ss')]
+    values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]
   }
 
   // callback

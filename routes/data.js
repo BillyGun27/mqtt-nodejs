@@ -1,6 +1,8 @@
 var express = require('express');
 const path = require('path');
 var mv = require('mv');
+var moment = require('moment-timezone');
+
 var router = express.Router();
 var pool = require("../connectpg");
 
@@ -18,11 +20,14 @@ router.get('/', function(request, response, next) {
 /* GET home page. */
 router.post('/sensor', function(request, response, next) {
   // callback
-  var result;
+  var result;//request.body.min//request.query.min 
   //console.log("l"+(request.query.min == null )  );
+  var min = moment(request.body.min,"MM/DD/YY" ).format("YYYY-MM-DD");
+  var max =  moment(request.body.max,"MM/DD/YY" ).format("YYYY-MM-DD");
+  console.log(max);
   var query = {
-    text: "SELECT * , to_date( '2014/04/25', 'YYYY/MM/DD') as re_format FROM sensor WHERE receive_date BETWEEN $1 AND $2 ",
-    values: [ request.query.min ,request.query.max ]
+    text: "SELECT id,do_value, to_char(receive_date, 'MM/DD/YY') AS receive_date,receive_time FROM sensor WHERE receive_date BETWEEN $1 AND $2 ",
+    values: [ min , max ]
   }
 pool.query(query, (err, res) => {
  if (err) {
@@ -51,7 +56,7 @@ router.get('/mesin', function(request, response, next) {
   // callback
   var result;
   var query = {
-    text: "SELECT x1.status_mesin AS status_awal, x2.status_mesin AS status_akhir ,(x2.receive_time - x1.receive_time) AS diff FROM public.mesin AS x1 ,public.mesin AS x2 WHERE x1.id +1 = x2.id "//,
+    text: "SELECT x1.status_mesin AS status_awal,x1.receive_time AS time_awal ,to_char(x1.receive_date, 'MM/DD/YY') AS date_awal, x2.status_mesin AS status_akhir,x2.receive_time AS time_akhir  ,to_char(x2.receive_date, 'MM/DD/YY') AS date_akhir,(x2.receive_time - x1.receive_time) AS diff FROM public.mesin AS x1 ,public.mesin AS x2 WHERE x1.id +1 = x2.id "//,
   }
 pool.query(query, (err, res) => {
  if (err) {
