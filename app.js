@@ -20,7 +20,7 @@ client.on('connect', function () {
  
 
 
-var msg;
+var checkmqtt = "F";
 client.on('message', function (topic, message) {
   // message is Buffer
  // console.log(message.toString())
@@ -38,8 +38,8 @@ client.on('message', function (topic, message) {
    case "sensor":
     table = "sensor"
     content = "do_value";
-    msg = topic +"="+message.toString();
-  console.log(msg);
+    checkmqtt = topic +"="+message.toString();
+  console.log(checkmqtt);
     Sendpgsql(table,content,message,ind);
      break;
    
@@ -174,10 +174,17 @@ app.get('/' , (request,response) => {
 });
 */
 app.get('/mqtt', function(request, response, next) {
-  response.send(msg);
+  response.send(checkmqtt);
 });
 
 app.get('/testpg', function(request, response, next) {
+  var query = {
+    // give the query a unique name
+    name: table,
+    text: 'INSERT INTO mesin (status_mesin ,receive_date,receive_time) VALUES ($1,$2,$3) ',
+    values: [  '0'  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]
+  }
+  
    // callback
    var result;
       pool.query(query, (err, res) => {
