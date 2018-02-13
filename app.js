@@ -178,9 +178,10 @@ app.get('/mqtt', function(request, response, next) {
 });
 
 app.get('/testpg', function(request, response, next) {
+  var ind = moment().tz("Asia/Jakarta");
   var query = {
     // give the query a unique name
-    name: table,
+    name: "mesin",
     text: 'INSERT INTO mesin (status_mesin ,receive_date,receive_time) VALUES ($1,$2,$3) ',
     values: [  '0'  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]
   }
