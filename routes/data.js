@@ -149,7 +149,7 @@ router.get('/xls', function(request, response, next) {
 }
    */  
 //"date":"12/21/17"dat =
-datmin = request.query.max;//request.body.min; 
+datmin = request.query.min;//request.body.min; 
 datmax = request.query.max;//request.body.max;
     var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
       data: data
