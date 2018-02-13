@@ -45,6 +45,28 @@ pool.query(query, (err, res) => {
 
 });
 
+router.get('/sensor', function(request, response, next) {
+  // callback
+  var result;//request.body.min//request.query.min 
+  //console.log("l"+(request.query.min == null )  );
+  
+  var query = {
+    text: "SELECT id,do_value, to_char(receive_date, 'MM/DD/YY') AS receive_date,receive_time FROM sensor  "
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+  // console.log(res)
+ }
+ response.send(result); 
+ //console.log(request);  
+})
+
+});
+
 /**
  * SELECT x1.id, x1.date, DATEDIFF(mi, x2.date, x1.date)
 FROM x AS x1 LEFT JOIN x AS x2
@@ -72,6 +94,8 @@ pool.query(query, (err, res) => {
 
 
 });
+
+
 
 
 router.post('/upload', function(request, response, next) {
@@ -128,10 +152,29 @@ datmax = request.body.max;
   });
 
  
-
-
-
 });
 
+router.get('/xls', function(request, response, next) {
+  // callback
+  var data;
+  
+  node_xj({
+    input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
+    output: null, // output json 
+    lowerCaseHeaders:true
+  }, function(err, result) {
+    if(err) {
+      data = err;
+      console.error(err);
+    } else {
+      data = result;
+      console.log(result);
+    }
+ 
+    response.send(data);  
+  });
+
+ 
+});
 
 module.exports = router;
