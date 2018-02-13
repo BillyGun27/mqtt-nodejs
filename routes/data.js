@@ -86,7 +86,7 @@ response.send(newpath);
 var node_xj = require("xlsx-to-json-lc");
 var jsonQuery = require('json-query');
 
-router.get('/xls', function(request, response, next) {
+router.post('/xls', function(request, response, next) {
   // callback
   var data;
   
@@ -111,8 +111,10 @@ router.get('/xls', function(request, response, next) {
   ]
 }
      */
-//"date":"12/21/17"
-    var output= jsonQuery('[* date>=12/21/17 & date<=12/22/17]', {
+//"date":"12/21/17"dat =
+datmin = request.body.min; 
+datmax = request.body.max;
+    var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
       data: data
     }).value
 
