@@ -46,7 +46,7 @@ pool.query(query, (err, res) => {
  }
  response.send(result); 
  //console.log(request);  
-})
+});
 
 
 
@@ -70,11 +70,12 @@ pool.query(query, (err, res) => {
  }
  response.send(result); 
  //console.log(request);  
-})
+});
 
 
 
 });
+
 /*
 router.get('/sensor', function(request, response, next) {
   // callback
@@ -125,6 +126,28 @@ pool.query(query, (err, res) => {
 
 
 });
+
+router.get('/pompa', function(request, response, next) {
+  // callback
+  var result;
+  var query = {
+    text: "SELECT * from mesin  ORDER BY id DESC LIMIT 1"//,
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+
+
+});
+
 
 router.get('/mesinall', function(request, response, next) {
   // callback
