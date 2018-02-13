@@ -14,13 +14,13 @@ client.on('connect', function () {
   client.subscribe('machine')
   client.subscribe('sensor')
  // client.publish('sensor', '100')
-  client.publish('machine','0')
+ // client.publish('machine','0')
   //client.publish('machine','1')
 })
  
 
 
-var msg
+var msg;
 client.on('message', function (topic, message) {
   // message is Buffer
  // console.log(message.toString())
@@ -38,7 +38,7 @@ client.on('message', function (topic, message) {
    case "sensor":
     table = "sensor"
     content = "do_value";
-    msg = topic,"+",message.toString()
+    msg = topic +"="+message.toString();
   console.log(msg);
     Sendpgsql(table,content,message,ind);
      break;
