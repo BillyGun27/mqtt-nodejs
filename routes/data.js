@@ -102,6 +102,26 @@ pool.query(query, (err, res) => {
 
 });
 
+router.get('/mesinall', function(request, response, next) {
+  // callback
+  var result;
+  var query = {
+    text: "SELECT * from mesin "//,
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+
+
+});
 
 
 
