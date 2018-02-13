@@ -56,10 +56,7 @@ pool.query(query, (err, res) => {
 router.get('/meteran', function(request, response, next) {
   // callback
   var result;//request.body.min//request.query.min 
-  //console.log("l"+(request.query.min == null )  );
- // var min = moment(request.query.min,"MM/DD/YY" ).format("YYYY-MM-DD");
- // var max =  moment(request.query.max,"MM/DD/YY" ).format("YYYY-MM-DD");
- // console.log(max);
+
   var query = {
     text: "SELECT id,do_value, to_char(receive_date, 'MM/DD/YY') AS receive_date,receive_time FROM sensor ORDER BY id DESC LIMIT 1 ",
   }
