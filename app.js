@@ -24,7 +24,8 @@ var checkmqtt = "F";
 client.on('message', function (topic, message) {
   // message is Buffer
  // console.log(message.toString())
- // msg = message.toString()
+ checkmqtt = topic +"="+message.toString();
+  console.log(checkmqtt);
  var ind = moment().tz("Asia/Jakarta")
 
  var table ,content;
@@ -32,14 +33,14 @@ client.on('message', function (topic, message) {
    case "machine":
     table = "mesin"
     content = "status_mesin";
-    console.log(topic,"+",message.toString());
+  //  console.log(topic,"+",message.toString());
     Sendpgsql(table,content,message,ind);
      break;
    case "sensor":
     table = "sensor"
     content = "do_value";
-    checkmqtt = topic +"="+message.toString();
-  console.log(checkmqtt);
+   // checkmqtt = topic +"="+message.toString();
+ // console.log(checkmqtt);
     Sendpgsql(table,content,message,ind);
      break;
    

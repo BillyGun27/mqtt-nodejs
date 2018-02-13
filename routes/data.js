@@ -51,6 +51,33 @@ pool.query(query, (err, res) => {
 
 
 });
+
+/* GET home page. */
+router.get('/meteran', function(request, response, next) {
+  // callback
+  var result;//request.body.min//request.query.min 
+  //console.log("l"+(request.query.min == null )  );
+  var min = moment(request.query.min,"MM/DD/YY" ).format("YYYY-MM-DD");
+  var max =  moment(request.query.max,"MM/DD/YY" ).format("YYYY-MM-DD");
+ // console.log(max);
+  var query = {
+    text: "SELECT id,do_value, to_char(receive_date, 'MM/DD/YY') AS receive_date,receive_time FROM sensor DESC LIMIT 1 ",
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+  // console.log(res)
+ }
+ response.send(result); 
+ //console.log(request);  
+})
+
+
+
+});
 /*
 router.get('/sensor', function(request, response, next) {
   // callback
