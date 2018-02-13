@@ -14,7 +14,8 @@ client.on('connect', function () {
   client.subscribe('machine')
   client.subscribe('sensor')
  // client.publish('sensor', '100')
- // client.publish('machine','0')
+  client.publish('machine','0')
+  //client.publish('machine','1')
 })
  
 
@@ -37,8 +38,8 @@ client.on('message', function (topic, message) {
    case "sensor":
     table = "sensor"
     content = "do_value";
-   // msg = message.toString();
-  console.log(topic,"+",message.toString());
+    msg = topic,"+",message.toString()
+  console.log(msg);
     Sendpgsql(table,content,message,ind);
      break;
    
@@ -154,7 +155,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/auth', auth);
 app.use('/data',data);
-
+/*
 var passwordHash = require('password-hash');
 
     var hashedPassword = passwordHash.generate('password123');
@@ -164,7 +165,7 @@ var passwordHash = require('password-hash');
     var hashedPassword = 'sha1$ca4cb726$1$9179553941a35688832f486a0540df6d64ca5e6d';
     
     console.log(passwordHash.verify('password123', hashedPassword)); // true
-    console.log(passwordHash.verify('Password0', hashedPassword)); // false
+    console.log(passwordHash.verify('Password0', hashedPassword)); // false*/
 /*
 app.get('/' , (request,response) => {
    
