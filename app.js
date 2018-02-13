@@ -4,6 +4,7 @@ const formidable = require('express-formidable');
 const mqtt = require('mqtt');
 const bodyParser = require('body-parser');
 var moment = require('moment-timezone');
+var cors = require('cors');
 
 const client  = mqtt.connect('mqtt://iot.eclipse.org');//mqtt://127.0.0.1
 
@@ -128,6 +129,7 @@ var data = require('./routes/data');
 var app = express();
 
 // Add headers
+/*
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
@@ -146,8 +148,8 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
-
-
+*/
+app.use(cors());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(formidable());
