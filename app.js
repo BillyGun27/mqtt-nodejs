@@ -57,7 +57,8 @@ function Sendpgsql(table,content,message,ind){
     // give the query a unique name
     name: table,
     text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time) VALUES ($1,$2,$3) ',
-    values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]
+    values: [  message.toString()  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss')]//heroku
+    // values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]//my comp
   }
 
   // callback
