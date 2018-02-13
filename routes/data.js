@@ -223,7 +223,7 @@ datmax = request.query.max;//request.body.max;
     }).value
 
     response.send(output); 
-    response.end(); 
+    
   });
  
 });
