@@ -50,7 +50,7 @@ router.get('/mesin', function(request, response, next) {
   // callback
   var result;
   var query = {
-    text: "SELECT * ,(x2.receive_time - x1.receive_time) AS diff FROM public.mesin AS x1 ,public.mesin AS x2 WHERE x1.id +1 = x2.id "//,
+    text: "SELECT x1.status_mesin AS status_awal, x2.status_mesin AS status_akhir ,(x2.receive_time - x1.receive_time) AS diff FROM public.mesin AS x1 ,public.mesin AS x2 WHERE x1.id +1 = x2.id "//,
   }
 pool.query(query, (err, res) => {
  if (err) {
@@ -84,6 +84,8 @@ response.send(newpath);
 });
 
 var node_xj = require("xlsx-to-json-lc");
+var jsonQuery = require('json-query');
+
 router.get('/xls', function(request, response, next) {
   // callback
   var data;
@@ -100,8 +102,21 @@ router.get('/xls', function(request, response, next) {
       data = result;
       console.log(result);
     }
+    /**
+     * var data = {
+  people: [
+    {name: 'Matt', country: 'NZ'},
+    {name: 'Pete', country: 'AU'},
+    {name: 'Mikey', country: 'NZ'}
+  ]
+}
+     */
+//"date":"12/21/17"
+    var output= jsonQuery('[* date>=12/21/17 & date<=12/22/17]', {
+      data: data
+    }).value
 
-    response.send(data);  
+    response.send(output);  
   });
 
  
