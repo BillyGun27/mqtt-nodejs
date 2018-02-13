@@ -183,7 +183,7 @@ app.get('/testpg', function(request, response, next) {
     // give the query a unique name
     name: "mesin",
     text: 'INSERT INTO mesin (status_mesin ,receive_date,receive_time) VALUES ($1,$2,$3) ',
-    values: [  '0'  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]
+    values: [  '0'  ,ind.format('YY/MM/DD'),ind.format('HH:mm:ss')]
   }
   
    // callback
