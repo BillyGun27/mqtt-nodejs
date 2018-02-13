@@ -19,7 +19,7 @@ router.get('/', function(request, response, next) {
 router.post('/sensor', function(request, response, next) {
   // callback
   var result;
-  console.log("l"+(request.query.min == null )  );
+  //console.log("l"+(request.query.min == null )  );
   var query = {
     text: "SELECT * , to_date( '2014/04/25', 'YYYY/MM/DD') as re_format FROM sensor WHERE receive_date BETWEEN $1 AND $2 ",
     values: [ request.query.min ,request.query.max ]
