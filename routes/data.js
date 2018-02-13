@@ -17,14 +17,21 @@ router.get('/', function(request, response, next) {
 
 });
 
+router.post('/err', function(request, response, next) {
+     
+    
+  response.send(request.headers);   
+
+});
+
 /* GET home page. */
-router.post('/sensor', function(request, response, next) {
+router.get('/sensor', function(request, response, next) {
   // callback
   var result;//request.body.min//request.query.min 
   //console.log("l"+(request.query.min == null )  );
-  var min = moment(request.body.min,"MM/DD/YY" ).format("YYYY-MM-DD");
-  var max =  moment(request.body.max,"MM/DD/YY" ).format("YYYY-MM-DD");
-  console.log(max);
+  var min = moment(request.query.min,"MM/DD/YY" ).format("YYYY-MM-DD");
+  var max =  moment(request.query.max,"MM/DD/YY" ).format("YYYY-MM-DD");
+ // console.log(max);
   var query = {
     text: "SELECT id,do_value, to_char(receive_date, 'MM/DD/YY') AS receive_date,receive_time FROM sensor WHERE receive_date BETWEEN $1 AND $2 ",
     values: [ min , max ]
@@ -44,7 +51,7 @@ pool.query(query, (err, res) => {
 
 
 });
-
+/*
 router.get('/sensor', function(request, response, next) {
   // callback
   var result;//request.body.min//request.query.min 
@@ -66,7 +73,7 @@ pool.query(query, (err, res) => {
 })
 
 });
-
+*/
 /**
  * SELECT x1.id, x1.date, DATEDIFF(mi, x2.date, x1.date)
 FROM x AS x1 LEFT JOIN x AS x2
@@ -116,7 +123,7 @@ response.send(newpath);
 var node_xj = require("xlsx-to-json-lc");
 var jsonQuery = require('json-query');
 
-router.post('/xls', function(request, response, next) {
+router.get('/xls', function(request, response, next) {
   // callback
   var data;
   
@@ -140,20 +147,20 @@ router.post('/xls', function(request, response, next) {
     {name: 'Mikey', country: 'NZ'}
   ]
 }
-     */
+   */  
 //"date":"12/21/17"dat =
-datmin = request.body.min; 
-datmax = request.body.max;
+datmin = request.query.max;//request.body.min; 
+datmax = request.query.max;//request.body.max;
     var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
       data: data
     }).value
 
-    response.send(output);  
+    response.send(output); 
+    response.end(); 
   });
-
  
 });
-
+/*
 router.get('/xls', function(request, response, next) {
   // callback
   var data;
@@ -175,6 +182,6 @@ router.get('/xls', function(request, response, next) {
   });
 
  
-});
+});*/
 
 module.exports = router;
